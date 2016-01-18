@@ -22,6 +22,7 @@ $.get("https://youtube.com", function(youtube) {
                 resetHomepage();
                 $("#content").html(manager);
                 $("body").show();
+                document.title = "Playlist Manager - YouTube (add-on)";
             }, "html");
         }, 1500);
     });    
