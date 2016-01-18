@@ -1,0 +1,35 @@
+{
+    "manifest_version"  : 2,
+    "name"              : "YouTube Playlist Manager",
+    "version"           : "0.1.0",
+    
+    // Not needed, because this isn't i18n'd
+    // "default_locale"    : "en",
+    "description"       : "A Chrome addon that vastly improves YouTube playlist management.",
+    "icons"             : {},
+    
+    "author"            : "Solonarv",
+    "background"        : {},
+    "commands"          : {},
+    
+    "content_scripts"   : [
+        {
+            // This page results in a 404, so it's fine if we override it.
+            "matches"   : ["https://*.youtube.com/playlists", "http://*.youtube.com/playlists"],
+            "css"       : [],
+            // This will load an entire webpage to replace YouTube's 404 page.
+            "js"        : ["playlist-manager-bootstrap.js"],
+            // We want to run ASAP in order to minimize unnecessary loads, since we're nuking the entire page anyway.
+            // However, we do need to *have* a DOM to nuke, so this is the earliest we can run.
+            "run_at"    : "document_end"
+        }
+    ],
+    
+    "permissions"       : [
+        "https://youtube.com/playlists"
+    ],
+    
+    "short_name"        : "YT playlists",
+    
+    "web_accessible_resources": ["playlist-manager.html"]
+}
