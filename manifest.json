@@ -18,9 +18,8 @@
             "matches"   : ["https://*.youtube.com/playlists", "http://*.youtube.com/playlists"],
             "css"       : [],
             // This will load an entire webpage to replace YouTube's 404 page.
-            "js"        : ["playlist-manager-bootstrap.js"],
+            "js"        : ["lib/jquery.js", "playlist-manager-bootstrap.js"],
             // We want to run ASAP in order to minimize unnecessary loads, since we're nuking the entire page anyway.
-            // However, we do need to *have* a DOM to nuke, so this is the earliest we can run.
             "run_at"    : "document_end"
         }
     ],
