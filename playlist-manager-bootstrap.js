@@ -1,41 +1,51 @@
 // Replace the current page with playlist-manager.html
 
-(function(){
-    var manager_url = chrome.extension.getURL("playlist-manager.html");
+var manager_url = chrome.extension.getURL("playlist-manager.html");
     
-    // document.write("<html><head><title>Loading YT Playlist Manager</title></head><body><h1>Loading...</h1></body></html>");
-    // document.body.style.background = "#b7b7b7";
-    
-    $.get("https://youtube.com", function(youtube) {
-        // youtube = $(youtube);
-        // youtube = resetHomepage(youtube);
-        
-        document.write(youtube);
-        
-        $.get(manager_url, function(manager) {
-            $("#content").append(manager);
-        }, "html");
-    }, "html");
-})();
+document.write("<html></html>");
+document.title = "Loading YT Playlist Manager...";
 
-function resetHomepage(youtube) {
-    // Nuke the banner ad
-    $("#header", youtube).remove();
+
+$.get("https://youtube.com", function(youtube) {
     
-    // Nuke the content, keep the <div /> because that's where the manager will go later
-    $("#content", youtube).empty();
+    document.write(youtube);
+    
+    $("body").hide();
+    document.title = "Loading YT Playlist Manager...";
+            
+    // This is running too early. I need to defer it to *after*
+    // the stuff from the above document.write has been processed.
+    $(function(){
+        // UGLY HAX!
+        setTimeout(function() {
+            $.get(manager_url, function(manager) {
+                resetHomepage();
+                $("#content").html(manager);
+                $("body").show();
+            }, "html");
+        }, 1500);
+    });    
+    
+}, "html");
+
+function resetHomepage() {
+    // Nuke the banner ad
+    $("#header").remove();
     
     // Nuke the header thingy
-    $("#masthead-appbar-container", youtube).remove();
+    $("#masthead-appbar-container").remove();
     
     // We are not actually on the home page, the guide should reflect that
-    $(".guide-item-selected", youtube).removeClass("guide-item-selected");
+    $(".guide-item-selected").removeClass("guide-item-selected");
     
     // Alter the "playlists" link (which for some reason doesn't have an ID) to point here
-    $("a[data-name='g-personal']", youtube).attr("href", "https://youtube.com/playlists");
+    $("a[data-name='g-personal']").attr("href", "https://youtube.com/playlists");
     
     // Unfocus the search box
-    $("#masthead-search-term", youtube).blur();
+    $("#masthead-search-term").blur();
     
-    return youtube;
+    // Nuke the content, keep the <div /> because that's where the manager will go later
+    // This doesn't work consistently, because #content is last in the source and therefore
+    // loaded last. This means it isn't always loaded by the time this gets called.
+    $("#content").children().remove();
 }
