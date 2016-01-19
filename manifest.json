@@ -21,14 +21,21 @@
             "js"        : ["lib/jquery.js", "playlist-manager-bootstrap.js"],
             // We want to run ASAP in order to minimize unnecessary loads, since we're nuking the entire page anyway.
             "run_at"    : "document_end"
-        }
+        },
+        {
+            "matches"   : ["https://*.youtube.com/playlists-oauth"],
+            "css"       : [],
+            "js"        : ["grab-oauth-token.js"],
+            "run_at"    : "document_start"    
     ],
     
     "permissions"       : [
-        "https://youtube.com/playlists"
+        "https://youtube.com/playlists",
+        // Just to handle setting and OAuth flow
+        "storage"
     ],
     
     "short_name"        : "YT playlists",
     
-    "web_accessible_resources": ["playlist-manager.html"]
+    "web_accessible_resources": ["playlist-manager.html", "playlist-manager.js", "playlist-manager.css"]
 }

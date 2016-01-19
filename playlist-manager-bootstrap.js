@@ -23,6 +23,10 @@ $.get("https://youtube.com", function(youtube) {
                 $("#content").html(manager);
                 $("body").show();
                 document.title = "Playlist Manager - YouTube (add-on)";
+                
+                chrome.storage.local.get("oauth", function (data) {
+                    $("ypm-oauth-info").attr("data", data.oauth);
+                });
             }, "html");
         }, 1500);
     });    
@@ -40,7 +44,10 @@ function resetHomepage() {
     $(".guide-item-selected").removeClass("guide-item-selected");
     
     // Alter the "playlists" link (which for some reason doesn't have an ID) to point here
-    $("a[data-name='g-personal']").attr("href", "https://youtube.com/playlists");
+    var playlists_link = $("a[data-name='g-personal']"),
+        playlists_page = playlists_link.attr("href");
+    playlists_link.attr("href", "https://youtube.com/playlists");
+    $("body").attr("playlists-link", playlists_link);
     
     // Unfocus the search box
     $("#masthead-search-term").blur();
